@@ -10,6 +10,5 @@
       "@Stores/*": ["src/stores/*"],
       "@Assets/*": ["assets/*"]
     }
-  },
-  
+  }
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   StyleSheet,
   Text,
@@ -7,8 +8,13 @@ import {
   TextInput,
   Button,
   FlatList,
+  StatusBar as SB,
+  Dimensions,
+  Alert 
 } from "react-native";
-import {TransItem} from "@Components/TransItem";
+import { TransItem, Type } from "./src/components/TransItem";
+import { WavyHeader } from "./src/components/WavyHeader";
+import { NewTrans } from "./src/components/NewTrans";
 
 interface IItem {
   value: string;
@@ -16,41 +22,46 @@ interface IItem {
 }
 
 export default function App() {
-  const [textInput, SetTextInput] = useState<string>("");
   const [itemList, SetItemList] = useState<IItem[]>([]);
 
-  const handleOnPress = () => {
-    if (textInput.length > 0) {
-      SetTextInput("");
+  const onItemAdd = (data:String) => {
       SetItemList([
         ...itemList,
         {
-          value: textInput,
+          value: data,
           id: Math.random(),
         } as IItem,
-      ]);
-    }
-  };
+      ]);}
 
-  const handleOnChangeText = (text: string): void => {
-    SetTextInput(text);
-  };
+  const onItemDelete = (id:number) => {
+    Alert.alert('Alerta', 'Esta seguro de borrar el elemento?', [
+      {
+        text: 'Cancelar',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: () => SetItemList(itemList.filter((item) => item.id !== id)) },
+    ]);
+    
+  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={handleOnChangeText}
-          value={textInput}
-        />
-        <Button onPress={handleOnPress} title="Add" color="#841584" />
-      </View>
-      <View>
+      <WavyHeader
+        customStyles={{
+          position: "absolute",
+          width: Dimensions.get("window").width,
+        }}
+      />
+      <NewTrans onPress={onItemAdd}/>
+      <View style={{flex: 1}}>
         <FlatList
+          contentContainerStyle={{ padding: 20, marginTop: 10 }}
           data={itemList}
-          renderItem={({ item }) => (<TransItem item={item} onPress={undefined} />)}
-          keyExtractor={item => item.id.toString()}
+          renderItem={({ item }) => (
+            <TransItem item={item} type={Type.income} onPress={onItemDelete} />
+          )}
+          keyExtractor={(item) => item.id.toString()}
         />
       </View>
       <StatusBar style="auto" />
@@ -59,20 +70,11 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 50 },
-  inputContainer: {
-    flexDirection: "row",
-  },
-  input: {
-    borderBottomColor: "black",
-    borderBottomWidth: 1,
-    flex: 1,
-    marginRight: 10,
-  },
-  item: {
-    borderColor: "black",
-    borderWidth: 1,
-    marginVertical: 10,
-    padding: 10,
+  container: {
+    padding: 0,
+    margin: 0,
+    marginTop: SB.currentHeight ?? 20,
+    backgroundColor: "#eee",
+    flex: 1
   },
 });
