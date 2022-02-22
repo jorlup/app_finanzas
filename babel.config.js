@@ -4,7 +4,7 @@ let rawAlias   = tsconfig.compilerOptions.paths;
 let alias      = {};
 
 for (let x in rawAlias) {
-    alias[x.replace('/*', '')] = rawAlias[x].map(item => item.replace('/*', ''));
+    alias[x.replace('/*', '')] = rawAlias[x].map(item => `./${item.replace('/*', '')}`);
 }
 
 module.exports = function(api) {
@@ -13,7 +13,7 @@ module.exports = function(api) {
     presets: ['babel-preset-expo'],
     plugins: [
       ["module-resolver", {
-        alias,
+        alias: alias,
         "extensions": [
           ".js",
           ".jsx",
