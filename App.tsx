@@ -1,80 +1,46 @@
-import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import { LinearGradient } from "expo-linear-gradient";
+import AppLoading from 'expo-app-loading';
 import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  FlatList,
-  StatusBar as SB,
-  Dimensions,
-  Alert 
-} from "react-native";
-import { TransItem, Type } from "./src/components/TransItem";
-import { WavyHeader } from "./src/components/WavyHeader";
-import { NewTrans } from "./src/components/NewTrans";
+  useFonts,
+  Roboto_100Thin,
+  Roboto_100Thin_Italic,
+  Roboto_300Light,
+  Roboto_300Light_Italic,
+  Roboto_400Regular,
+  Roboto_400Regular_Italic,
+  Roboto_500Medium,
+  Roboto_500Medium_Italic,
+  Roboto_700Bold,
+  Roboto_700Bold_Italic,
+  Roboto_900Black,
+  Roboto_900Black_Italic,
+} from '@expo-google-fonts/roboto';
+import { AddTransScreen } from "@Screens/AddTrans/AddTransScreen";
 
-interface IItem {
-  value: string;
-  id: number;
-}
+
 
 export default function App() {
-  const [itemList, SetItemList] = useState<IItem[]>([]);
 
-  const onItemAdd = (data:String) => {
-      SetItemList([
-        ...itemList,
-        {
-          value: data,
-          id: Math.random(),
-        } as IItem,
-      ]);}
+  let [fontsLoaded] = useFonts({
+    Roboto_100Thin,
+    Roboto_100Thin_Italic,
+    Roboto_300Light,
+    Roboto_300Light_Italic,
+    Roboto_400Regular,
+    Roboto_400Regular_Italic,
+    Roboto_500Medium,
+    Roboto_500Medium_Italic,
+    Roboto_700Bold,
+    Roboto_700Bold_Italic,
+    Roboto_900Black,
+    Roboto_900Black_Italic,
+  });
 
-  const onItemDelete = (id:number) => {
-    Alert.alert('Alerta', 'Esta seguro de borrar el elemento?', [
-      {
-        text: 'Cancelar',
-        onPress: () => {},
-        style: 'cancel',
-      },
-      { text: 'OK', onPress: () => SetItemList(itemList.filter((item) => item.id !== id)) },
-    ]);
-    
+  // Espera por carga de fuentes
+  if (!fontsLoaded) {
+    return <AppLoading />;
   }
 
   return (
-    <View style={styles.container}>
-      <WavyHeader
-        customStyles={{
-          position: "absolute",
-          width: Dimensions.get("window").width,
-        }}
-      />
-      <NewTrans onPress={onItemAdd}/>
-      <View style={{flex: 1}}>
-        <FlatList
-          contentContainerStyle={{ padding: 20, marginTop: 10 }}
-          data={itemList}
-          renderItem={({ item }) => (
-            <TransItem item={item} type={Type.income} onPress={onItemDelete} />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </View>
-      <StatusBar style="auto" />
-    </View>
+    <AddTransScreen/>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 0,
-    margin: 0,
-    marginTop: SB.currentHeight ?? 20,
-    backgroundColor: "#eee",
-    flex: 1
-  },
-});
