@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import React from "react";
-import {Text, View, Image, TouchableOpacity} from "react-native";
+import { View, Image, TouchableOpacity} from "react-native";
 import {styles} from "./styles";
 import { FontText } from "../FontText";
 

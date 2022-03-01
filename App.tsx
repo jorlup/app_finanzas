@@ -1,3 +1,4 @@
+import React from "react";
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -14,17 +15,11 @@ import {
   Roboto_900Black,
   Roboto_900Black_Italic,
 } from "@expo-google-fonts/roboto";
-import { AddTransScreen } from "@Screens/AddTrans/AddTransScreen";
-import { useState } from "react";
-import { BienvenidaScreen } from "@Screens/Bienvenida/BienvenidaScreen";
 
-enum Screen {
-  AddTrans = "AddTrans",
-  Bienvenida = "Bienvenida",
-}
+import { NavigationContainer } from "@react-navigation/native";
+import MainNav from "@Navigation/main";
 
 export default function App() {
-  const [screen, setScreen] = useState(Screen.Bienvenida);
 
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
@@ -41,16 +36,14 @@ export default function App() {
     Roboto_900Black_Italic,
   });
 
-  const onClick = () => {setScreen(Screen.AddTrans)};
-
   // Espera por carga de fuentes
   if (!fontsLoaded) {
     return <AppLoading />;
   }
 
-  if (screen === Screen.AddTrans) {
-    return <AddTransScreen />;
-  } else if (screen === Screen.Bienvenida) {
-    return <BienvenidaScreen onClick={onClick}/>;
-  }
+  return (
+    <NavigationContainer>
+      < MainNav />
+    </NavigationContainer>
+  );
 }

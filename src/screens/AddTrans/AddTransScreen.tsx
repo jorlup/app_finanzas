@@ -5,12 +5,19 @@ import { StatusBar } from "expo-status-bar";
 import React, { FC, useState } from "react";
 import { Alert, Dimensions, FlatList, StyleSheet, View, StatusBar as SB, } from "react-native";
 
+export { Type } from "@Components/TransItem";
+
 interface IItem {
     value: string;
     id: number;
   }
 
-export const AddTransScreen: FC = () => {
+  //TODO: mejorar esto
+  interface IProps {
+    route: any;
+  };
+
+export const AddTransScreen: FC<IProps> = ({route:{params:{type}}}) => {
     const [itemList, SetItemList] = useState<IItem[]>([]);
 
     const onItemAdd = (data:String) => {
@@ -46,7 +53,7 @@ export const AddTransScreen: FC = () => {
           contentContainerStyle={{ padding: 20, marginTop: 10 }}
           data={itemList}
           renderItem={({ item }) => (
-            <TransItem item={item} type={Type.income} onPress={onItemDelete} />
+            <TransItem item={item} type={type} onPress={onItemDelete} />
           )}
           keyExtractor={(item) => item.id.toString()}
         />
